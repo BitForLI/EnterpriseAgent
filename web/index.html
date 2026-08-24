@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar 客服台</title>
+  <style>
+    :root {
+      --ink: #15231f;
+      --paper: #f3efe4;
+      --panel: #fffdf6;
+      --signal: #d9ff4f;
+      --rust: #d75a36;
+      --muted: #6f7974;
+      --line: rgba(21, 35, 31, .16);
+      --shadow: 0 24px 70px rgba(28, 44, 38, .14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 12%, rgba(217,255,79,.35), transparent 24rem),
+        repeating-linear-gradient(90deg, transparent 0 39px, rgba(21,35,31,.035) 40px),
+        var(--paper);
+      font-family: "Aptos", "PingFang SC", sans-serif;
+    }
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      min-height: calc(100vh - 48px);
+      margin: 24px auto;
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,253,246,.88);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      animation: arrive .7s cubic-bezier(.2,.8,.2,1) both;
+    }
+    aside { padding: 30px 24px; background: var(--ink); color: var(--paper); }
+    .eyebrow { font: 700 11px/1 "Consolas", monospace; letter-spacing: .16em; color: var(--signal); }
+    h1 { margin: 12px 0 8px; font: 500 34px/1.05 Georgia, "Songti SC", serif; }
+    .subtitle { color: #b9c2bd; font-size: 13px; line-height: 1.65; }
+    .status {
+      margin: 34px 0; padding: 15px; border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px; background: rgba(255,255,255,.06);
+    }
+    .status-line { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+    .pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 6px rgba(217,255,79,.12); }
+    .routes { display: grid; gap: 8px; }
+    .routes button {
+      text-align: left; padding: 11px 12px; color: #dce2de; background: transparent;
+      border: 1px solid rgba(255,255,255,.1); border-radius: 10px; cursor: pointer;
+      transition: .2s ease;
+    }
+    .routes button:hover, .routes button:focus-visible { color: var(--ink); background: var(--signal); transform: translateX(4px); outline: none; }
+    main { min-width: 0; display: grid; grid-template-rows: auto 1fr auto; }
+    header { padding: 26px 32px 18px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    header strong { font: 600 15px Georgia, serif; }
+    #intent { font: 700 11px Consolas, monospace; color: var(--rust); text-transform: uppercase; }
+    #messages { padding: 28px 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+    .message { max-width: 78%; animation: rise .32s ease both; }
+    .message .label { margin: 0 0 6px; font: 700 10px Consolas, monospace; letter-spacing: .12em; color: var(--muted); }
+    .bubble { padding: 15px 17px; border-radius: 16px; line-height: 1.65; white-space: pre-wrap; }
+    .assistant .bubble { background: #e8e4d8; border-top-left-radius: 4px; }
+    .user { align-self: flex-end; }
+    .user .label { text-align: right; }
+    .user .bubble { color: white; background: var(--ink); border-top-right-radius: 4px; }
+    .composer { padding: 20px 32px 28px; border-top: 1px solid var(--line); }
+    form { display: flex; gap: 10px; }
+    textarea {
+      flex: 1; min-height: 52px; max-height: 130px; resize: vertical; padding: 15px 16px;
+      color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 14px;
+      font: inherit; outline: none;
+    }
+    textarea:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(217,255,79,.5); }
+    button[type=submit] {
+      min-width: 96px; border: 0; border-radius: 14px; background: var(--rust); color: white;
+      font-weight: 700; cursor: pointer; transition: transform .2s ease, filter .2s ease;
+    }
+    button[type=submit]:hover { transform: translateY(-2px); filter: brightness(.95); }
+    button:disabled { opacity: .55; cursor: wait; }
+    .hint { margin: 9px 2px 0; color: var(--muted); font-size: 11px; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(18px) scale(.99); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+    @media (max-width: 760px) {
+      .shell { grid-template-columns: 1fr; margin: 0; width: 100%; min-height: 100vh; border-radius: 0; }
+      aside { padding: 20px; }
+      aside .subtitle, .status { display: none; }
+      h1 { font-size: 25px; }
+      .routes { grid-template-columns: repeat(2, 1fr); margin-top: 18px; }
+      #messages, header, .composer { padding-left: 18px; padding-right: 18px; }
+      .message { max-width: 90%; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="eyebrow">CUSTOMER OPS / 01</div>
+      <h1>Northstar<br>客服工作台</h1>
+      <p class="subtitle">本地可运行的多流程智能客服。知识检索、业务工具与人工审核都在同一条服务链路中。</p>
+      <div class="status"><div class="status-line"><span class="pulse"></span><span>Agent 在线 · Local Mode</span></div></div>
+      <div class="routes" aria-label="快捷问题">
+        <button data-prompt="推荐一款适合办公的电脑">商品推荐</button>
+        <button data-prompt="查询用户 101 的订单">订单查询</button>
+        <button data-prompt="商品怎么退货？">退换货政策</button>
+        <button data-prompt="我要投诉并转人工客服">人工转接</button>
+      </div>
+    </aside>
+    <main>
+      <header><strong>实时会话</strong><span id="intent">READY</span></header>
+      <section id="messages" aria-live="polite">
+        <article class="message assistant"><p class="label">NORTHSTAR</p><div class="bubble">你好，我可以帮你推荐商品、查询订单和解释售后政策。想先处理什么？</div></article>
+      </section>
+      <div class="composer">
+        <form id="chat-form">
+          <textarea id="message-input" maxlength="2000" aria-label="输入客服问题" placeholder="输入问题，Enter 发送…" required></textarea>
+          <button type="submit">发送</button>
+        </form>
+        <p class="hint">Shift + Enter 换行 · 敏感操作需要人工审核</p>
+      </div>
+    </main>
+  </div>
+  <script>
+    const sessionId = crypto.randomUUID();
+    const form = document.querySelector('#chat-form');
+    const input = document.querySelector('#message-input');
+    const messages = document.querySelector('#messages');
+    const intent = document.querySelector('#intent');
+    const submit = form.querySelector('button');
+
+    function addMessage(role, text) {
+      const article = document.createElement('article');
+      article.className = `message ${role}`;
+      const label = document.createElement('p');
+      label.className = 'label';
+      label.textContent = role === 'user' ? 'YOU' : 'NORTHSTAR';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      article.append(label, bubble);
+      messages.append(article);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    async function send(text) {
+      addMessage('user', text);
+      input.value = '';
+      submit.disabled = true;
+      intent.textContent = 'ROUTING…';
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({message: text, session_id: sessionId})
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        addMessage('assistant', data.response);
+        intent.textContent = data.intent.replaceAll('_', ' ');
+      } catch (error) {
+        addMessage('assistant', '连接失败，请确认服务正在运行后重试。');
+        intent.textContent = 'OFFLINE';
+      } finally {
+        submit.disabled = false;
+        input.focus();
+      }
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const text = input.value.trim();
+      if (text) send(text);
+    });
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+    document.querySelectorAll('[data-prompt]').forEach(button => {
+      button.addEventListener('click', () => send(button.dataset.prompt));
+    });
+  </script>
+</body>
+</html>

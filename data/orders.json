@@ -1,0 +1,26 @@
+[
+  {
+    "id": 9001,
+    "user_id": 101,
+    "status": "运输中",
+    "logistics": "顺丰 SF20260824001，预计明日送达",
+    "total": 3999,
+    "items": ["Aurora X1 手机"]
+  },
+  {
+    "id": 9002,
+    "user_id": 101,
+    "status": "已完成",
+    "logistics": "已于 2026-08-18 签收",
+    "total": 899,
+    "items": ["EchoBuds 降噪耳机"]
+  },
+  {
+    "id": 9003,
+    "user_id": 102,
+    "status": "待发货",
+    "logistics": "仓库正在配货",
+    "total": 6999,
+    "items": ["Nimbus Pro 笔记本"]
+  }
+]

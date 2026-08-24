@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1001,
+    "name": "Aurora X1 手机",
+    "category": "手机",
+    "price": 3999,
+    "stock": 28,
+    "rating": 4.8,
+    "tags": ["手机", "拍照", "轻薄"],
+    "description": "轻薄机身，适合日常拍照和移动办公。"
+  },
+  {
+    "id": 1002,
+    "name": "Nimbus Pro 笔记本",
+    "category": "电脑",
+    "price": 6999,
+    "stock": 12,
+    "rating": 4.9,
+    "tags": ["电脑", "办公", "续航"],
+    "description": "长续航商务本，适合办公与轻量开发。"
+  },
+  {
+    "id": 1003,
+    "name": "EchoBuds 降噪耳机",
+    "category": "耳机",
+    "price": 899,
+    "stock": 46,
+    "rating": 4.7,
+    "tags": ["耳机", "降噪", "通勤"],
+    "description": "主动降噪和通透模式，适合通勤。"
+  },
+  {
+    "id": 1004,
+    "name": "Canvas 27 显示器",
+    "category": "电脑配件",
+    "price": 1599,
+    "stock": 9,
+    "rating": 4.6,
+    "tags": ["显示器", "办公", "设计"],
+    "description": "27 英寸 2K 护眼屏，覆盖 100% sRGB。"
+  },
+  {
+    "id": 1005,
+    "name": "Pulse 智能手表",
+    "category": "穿戴设备",
+    "price": 1299,
+    "stock": 20,
+    "rating": 4.5,
+    "tags": ["手表", "运动", "健康"],
+    "description": "支持运动记录、睡眠和心率监测。"
+  }
+]
