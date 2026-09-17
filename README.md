@@ -2,15 +2,15 @@
 
 A locally runnable customer-service agent that connects conversational workflows to product, order, policy, and support-ticket tools. The project focuses on application behaviour: tool selection, retrieval quality, multi-turn state, confirmation before sensitive actions, and predictable failure handling.
 
-The bundled sample data is Chinese so the project can exercise retrieval and customer-support behaviour outside an English-only demo. The code and developer documentation are written in English.
+The bundled sample data and current intent rules are primarily Chinese, so the example prompts below use the language exercised by the tests. This README is in English; some user-facing strings and code comments remain Chinese.
 
 ## Features
 
 - Product recommendations, stock checks, pricing, and order tracking.
 - Hybrid retrieval over return, refund, warranty, and invoice policies, with source references.
 - Multi-turn conversation state and customer-detail extraction.
-- Explicit confirmation before order cancellation and other sensitive actions.
-- Prompt-injection checks, tool retry handling, and deterministic local fallbacks.
+- Explicit confirmation before creating a human-review ticket for order cancellation and other sensitive requests; the agent does not change orders itself.
+- Keyword-based checks for selected prompt-injection phrases, one retry for failed tools, and a local draft fallback when optional OpenAI wording fails.
 - SQLite-backed escalation tickets for complaints and requests that need a person.
 - FastAPI, a small browser client, a command-line mode, and an MCP tool server.
 
@@ -64,15 +64,25 @@ python -m pytest -q
 python -m evals.run_eval
 ```
 
-The test suite covers retrieval, product and order tools, multi-turn state, confirmation, escalation, and the HTTP API. The offline evaluation reports intent accuracy, answer quality, tool success, and citation coverage.
+The test suite covers retrieval, product and order tools, multi-turn state, confirmation, escalation, and the HTTP API. The six-case offline evaluation reports exact intent matches, required answer-text matches, expected tool use, and citation presence. Citation presence is not a check that the cited source supports every statement.
+
+## Evidence behind project claims
+
+The [LangGraph workflow](src/agent_graph.py) contains intent routing,
+confirmation and tool-failure handling. [Business tools](src/business_tools.py)
+read sample catalogue/order data and create [SQLite tickets](src/tickets.py).
+The [retriever](src/rag_engine.py) combines BM25 and character-bigram cosine
+similarity; policy answers attach document titles and IDs. The [MCP server](src/mcp_server.py)
+reuses those business functions. [Agent tests](tests/test_agent.py) exercise the
+main paths, while the [offline evaluator](evals/run_eval.py) specifies its
+scoring rules. Describe these as local, fixture-backed behaviours rather than
+production support outcomes or general prompt-injection protection.
 
 ## Example prompts
 
-- `Recommend a laptop for office work.`
-- `Where is order 9001?`
-- `Can I return an item within seven days?`
-- `I want to make a complaint and speak to support.`
-- `Cancel order 9001`, followed by the required confirmation.
+Use the Chinese customer questions in [`evals/dataset.json`](evals/dataset.json)
+or [`tests/test_agent.py`](tests/test_agent.py). They exercise the implemented
+intent rules; translated English prompts are not equivalent test fixtures.
 
 ## Repository layout
 
