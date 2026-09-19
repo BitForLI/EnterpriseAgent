@@ -1,6 +1,18 @@
 # Enterprise Customer Service Agent
 
-A locally runnable customer-service agent that connects conversational workflows to product, order, policy, and support-ticket tools. The project focuses on application behaviour: tool selection, retrieval quality, multi-turn state, confirmation before sensitive actions, and predictable failure handling.
+A customer-service assistant that answers routine questions from business data and hands sensitive requests to a person instead of acting beyond its authority.
+
+## Product at a glance
+
+| | |
+| --- | --- |
+| **Users** | Customers asking about products, orders, returns, warranties, and invoices |
+| **Problem** | A useful assistant must retrieve the right information, remember context, and know when not to act |
+| **Core experience** | Ask a question, receive an answer with sources, or create a support ticket after confirmation |
+| **Safety boundary** | The agent can look up information and request human review; it cannot directly cancel an order |
+| **Runs locally** | The default provider needs no API key and uses fixture-backed business data |
+
+The project focuses on observable behaviour rather than a chat interface alone: tool selection, retrieval quality, multi-turn state, confirmation before sensitive actions, and predictable failure handling.
 
 The bundled sample data and current intent rules are primarily Chinese, so the example prompts below use the language exercised by the tests. This README is in English; some user-facing strings and code comments remain Chinese.
 
