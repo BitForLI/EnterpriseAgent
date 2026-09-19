@@ -1,4 +1,4 @@
-# Enterprise Customer Service Agent
+# AI Customer Support Assistant
 
 A customer-service assistant that answers routine questions from business data and hands sensitive requests to a person instead of acting beyond its authority.
 
